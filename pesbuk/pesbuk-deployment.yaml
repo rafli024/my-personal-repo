@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  pesbuk-deploy
+  labels:
+    app:  pesbuk-deploy
+spec:
+  selector:
+    matchLabels:
+      app: pesbuk-deploy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  pesbuk-deploy
+    spec:
+      volumes:
+        - name: config-fb
+          configMap:
+            name: configmap-pesbuk
+      containers:
+        - name: php-pesbuk
+          image: sekolahdevopscilsy/php-sosmed
+          envFrom:
+            - configMapRef:
+                name: configmap-pesbuk
+          ports:
+          - containerPort: 80
+          env:
+           # - name: DB_HOST
+           #   valueFrom:
+           #     secretKeyRef:
+           #       name: pesbuk-secret-cloud
+           #       key: DB_HOST
+
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: pesbuk-secret-cloud
+                  key: DB_PASS
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: pesbuk-secret-cloud
+                  key:  DB_USER
+                  
+          volumeMounts:
+            - name: config-fb
+              mountPath: "/var/www/html/config.php"
+              subPath: "config.php"

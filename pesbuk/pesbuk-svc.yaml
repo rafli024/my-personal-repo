@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pesbuk-service
+spec:
+  selector:
+    app: pesbuk-deploy
+  type: LoadBalancer
+  ports:
+  - name: pesbuk-service
+    protocol: TCP
+    port: 8080
+    targetPort: 80
+---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: php-mysql-service
+#spec:
+#  selector:
+#    app: mysql-sosmed
+#  ports:
+#    - port: 3306
+#  type: ClusterIP
+#  protocol: TCP
